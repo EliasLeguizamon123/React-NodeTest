@@ -72,7 +72,7 @@ const Index = () => {
         },
         { Header: "Date & Time", accessor: "dateTime", },
         { Header: "Time Stamp", accessor: "timestamp", },
-        { Header: "Create By", accessor: "createdByName", },
+        { Header: "Create By", accessor: "createBy", },
         ...(permission?.update || permission?.view || permission?.delete ? [actionHeader] : [])
 
     ];
@@ -81,9 +81,9 @@ const Index = () => {
         setIsLoding(true)
         const result = await dispatch(fetchMeetingData())
         if (result.payload.status === 200) {
-            setData(result?.payload?.data);
+            setData(result?.payload?.data.data);
         } else {
-            toast.error("Failed to fetch data", "error");
+            toast.error(result?.payload.response.data.message, "error");
         }
         setIsLoding(false)
     }
@@ -99,10 +99,7 @@ const Index = () => {
             }
         } catch (error) {
             console.log(error)
-        }
-        finally {
-            setIsLoding(false)
-        }
+        };
     }
 
     // const [selectedColumns, setSelectedColumns] = useState([...tableColumns]);

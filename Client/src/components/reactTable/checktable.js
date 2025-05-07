@@ -341,6 +341,8 @@ const CommonCheckTable = (props) => {
         }
     }, [columns]);
 
+    console.log('columns', page)
+
     return (
         <>
             <Card
@@ -543,8 +545,8 @@ const CommonCheckTable = (props) => {
                         <ModalCloseButton onClick={() => { setManageColumnsModel(false); }} />
                         <ModalBody>
                             <div>
-                                {columnData?.map((column) => (
-                                    <Text display={"flex"} key={column?.accessor} py={2}>
+                                {columnData?.map((column, index) => (
+                                    <Text display={"flex"} key={index} py={2}>
                                         <Checkbox
                                             defaultChecked={columns?.some((item) => item?.accessor === column?.accessor)}
                                             onChange={() => toggleColumnVisibility(column?.accessor)}

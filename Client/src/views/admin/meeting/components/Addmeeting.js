@@ -43,7 +43,24 @@ const AddMeeting = (props) => {
         initialValues: initialValues,
         validationSchema: MeetingSchema,
         onSubmit: (values, { resetForm }) => {
-            
+            // pass datetime with type datetime-local to api
+            values.dateTime = dayjs(values.dateTime).format('YYYY-MM-DDTHH:mm:ss');
+            postApi('api/meeting', values).then((res) => {
+                if (res?.status === 200) {
+                    setIsLoding(false)
+                    toast.success(res?.data?.message)
+                    resetForm()
+                    onClose()
+                    setAction((prev) => !prev)
+                } else {
+                    setIsLoding(false)
+                    toast.error(res?.data?.message)
+                }
+            }
+            ).catch((err) => {
+                setIsLoding(false)
+                toast.error(err?.response?.data?.message)
+            })
         },
     });
     const { errors, touched, values, handleBlur, handleChange, handleSubmit, setFieldValue } = formik
