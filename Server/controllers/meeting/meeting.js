@@ -81,7 +81,8 @@ const view = async (req, res) => {
     try {
         const meetingID = req.params.id
         const meeting = await MeetingHistory.findById(meetingID)
-            .sort({ timestamp: -1 });
+            .sort({ timestamp: -1 })
+            .populate('createBy', 'username');
 
         if (!meeting) {
             return res.status(404).json({
@@ -90,10 +91,15 @@ const view = async (req, res) => {
             });
         }
 
+        const transformedMeeting = {
+            ...meeting.toObject(),
+            createBy: meeting.createBy?.username || "-"
+        };
+
         res.status(200).json({
             status: true,
             message: "Meeting retrieved successfully",
-            data: meeting,
+            data: transformedMeeting,
         });
     } catch (error) {
         res.status(500).json({ message: "Internal server error" })

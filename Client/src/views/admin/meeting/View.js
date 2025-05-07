@@ -28,8 +28,8 @@ const View = () => {
 
     const fetchData = async () => {
         setIsLoding(true)
-        let response = await getApi('api/meeting/view/', param.id)
-        setData(response?.data);
+        let response = await getApi('api/meeting/', param.id)
+        setData(response?.data.data);
         setIsLoding(false)
     }
 
@@ -81,6 +81,7 @@ const View = () => {
 
     const [permission, contactAccess, leadAccess] = HasAccess(['Meetings', 'Contacts', 'Leads'])
 
+
     return (
         <>
             {isLoding ?
@@ -104,7 +105,7 @@ const View = () => {
                                                     Meeting Details
                                                 </Heading>
                                                 <Box id="hide-btn">
-                                                    <Button leftIcon={<FaFilePdf />} size='sm' variant="brand" onClick={generatePDF} disabled={loading}>
+                                                    <Button leftIcon={<FaFilePdf />} size='sm' variant="brand" onClick={generatePDF} disabled={true}>
                                                         {loading ? "Please Wait..." : "Print as PDF"}
                                                     </Button>
                                                     <Button leftIcon={<IoIosArrowBack />} size='sm' variant="brand" onClick={() => navigate(-1)} style={{ marginLeft: 10 }}>
@@ -121,7 +122,7 @@ const View = () => {
                                     </GridItem>
                                     <GridItem colSpan={{ base: 2, md: 1 }}>
                                         <Text fontSize="sm" fontWeight="bold" color={'blackAlpha.900'}> Created By </Text>
-                                        <Text>{data?.createdByName ? data?.createdByName : ' - '}</Text>
+                                        <Text>{data?.createBy ? data?.createBy : ' - '}</Text>
                                     </GridItem>
 
                                     <GridItem colSpan={{ base: 2, md: 1 }}>
