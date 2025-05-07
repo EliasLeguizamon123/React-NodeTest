@@ -37,6 +37,7 @@ const View = () => {
         fetchData()
     }, [])
 
+    // this function not working properly
     const generatePDF = () => {
         setLoading(true)
         const element = document.getElementById("reports");
