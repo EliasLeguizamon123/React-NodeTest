@@ -36,7 +36,6 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
-y
     const generatePDF = () => {
         setLoading(true)
         const element = document.getElementById("reports");
