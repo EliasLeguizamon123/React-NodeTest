@@ -36,28 +36,34 @@ const View = () => {
     useEffect(() => {
         fetchData()
     }, [])
-
-    // this function not working properly
+y
     const generatePDF = () => {
         setLoading(true)
         const element = document.getElementById("reports");
         const hideBtn = document.getElementById("hide-btn");
         if (element) {
             hideBtn.style.display = 'none';
+            console.log('element', element)
+            const clonedElement = element.cloneNode(true);
+            clonedElement.style.width = "210mm";
+            clonedElement.style.minHeight = "400mm";
+            clonedElement.style.overflow = "visible";
+            clonedElement.style.background = "white";
+            document.body.appendChild(clonedElement);
             html2pdf()
                 .from(element)
                 .set({
-                    margin: [0, 0, 0, 0],
+                    margin: [0.5, 0.5, 0.5, 0.5],
                     filename: `Meeting_Details_${moment().format("DD-MM-YYYY")}.pdf`,
                     image: { type: "jpeg", quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, allowTaint: true },
-                    jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+                    html2canvas: { scale: 3, useCORS: true, allowTaint: true },
+                    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
                 })
                 .save().then(() => {
                     setLoading(false)
                     hideBtn.style.display = '';
+                    clonedElement.remove();
                 })
-            // }, 500);
         } else {
             console.error("Element with ID 'reports' not found.");
             setLoading(false)
@@ -106,7 +112,7 @@ const View = () => {
                                                     Meeting Details
                                                 </Heading>
                                                 <Box id="hide-btn">
-                                                    <Button leftIcon={<FaFilePdf />} size='sm' variant="brand" onClick={generatePDF} disabled={true}>
+                                                    <Button leftIcon={<FaFilePdf />} size='sm' variant="brand" onClick={generatePDF} disabled={loading}>
                                                         {loading ? "Please Wait..." : "Print as PDF"}
                                                     </Button>
                                                     <Button leftIcon={<IoIosArrowBack />} size='sm' variant="brand" onClick={() => navigate(-1)} style={{ marginLeft: 10 }}>
@@ -166,9 +172,6 @@ const View = () => {
                                             )
                                         }) : '-'}
                                     </GridItem>
-                                    {/* <Grid templateColumns={'repeat(2, 1fr)'} gap={4} id="reports">
-
-                                    </Grid> */}
                                 </Grid>
                             </Card>
                         </GridItem>
